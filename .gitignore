@@ -1,0 +1,16 @@
+# Ambiente Virtual
+venv/
+
+# Cache do Python
+__pycache__/
+
+# Arquivos de áudio (ignora MP3 na raiz de audios e também em processados)
+audios/**/*.mp3
+
+
+# Arquivos de transcrição (ignora os txts gerados)
+transcricoes/*.txt
+
+# Manter a estrutura das pastas vazias no repositório
+!audios/processados/.gitkeep
+!transcricoes/.gitkeep

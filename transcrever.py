@@ -1,0 +1,62 @@
+import glob
+import os
+import shutil
+import torch
+from faster_whisper import WhisperModel
+import datetime
+
+# Carregando bibliotecas da Nvidia (Otimizado para RTX 3050)
+model_size = "medium"
+model = WhisperModel(model_size, device="cuda", compute_type="float16")
+
+# Define as pastas do projeto
+pasta_audios = "audios"
+pasta_processados = os.path.join(pasta_audios, "processados")
+pasta_transcricoes = "transcricoes"
+
+# Cria as pastas caso elas ainda não existam
+os.makedirs(pasta_processados, exist_ok=True)
+os.makedirs(pasta_transcricoes, exist_ok=True)
+
+# Busca todos os arquivos .mp3 na pasta audios/ (ignora os que já estão em processados/)
+arquivos = glob.glob(os.path.join(pasta_audios, "*.mp3"))
+
+if not arquivos:
+    print(f"Nenhum arquivo .mp3 novo encontrado na pasta {pasta_audios}/")
+    exit()
+
+print(f"Encontrado(s) {len(arquivos)} arquivo(s) para processar.\n")
+
+# Processa cada arquivo encontrado na pasta
+for input_audio in arquivos:
+    nome_base_audio = os.path.basename(input_audio)
+    print(f"--- Processando: {nome_base_audio} na GPU ---")
+
+    # --- Lógica de Nomeação para Jekyll ---
+    data_hoje = datetime.datetime.now().strftime('%Y-%m-%d')
+    prefixo = f"{data_hoje}-transcricao"
+
+    # Conta arquivos existentes de hoje para definir o número (ex: -1.txt, -2.txt)
+    # Isso fica dentro do loop para garantir que cada áudio ganhe um número novo!
+    numero_sequencial = len(glob.glob(os.path.join(pasta_transcricoes, f"{prefixo}-*.txt"))) + 1
+    nome_arquivo_txt = f"{prefixo}-{numero_sequencial}.txt"
+    output_text = os.path.join(pasta_transcricoes, nome_arquivo_txt)
+
+    # Transcrição
+    segments, info = model.transcribe(input_audio, beam_size=5, language="pt")
+
+    # Abre o arquivo para salvar o texto
+    with open(output_text, "w", encoding="utf-8") as f:
+        for segment in segments:
+            texto_limpo = segment.text.strip()
+            print(texto_limpo) # Mostra no terminal para você acompanhar
+            f.write(texto_limpo + " ") # Salva no arquivo
+
+    print(f"\n✅ Texto salvo em: {output_text}")
+
+    # Move o arquivo de áudio processado para a subpasta
+    caminho_destino = os.path.join(pasta_processados, nome_base_audio)
+    shutil.move(input_audio, caminho_destino)
+    print(f"📁 Áudio original movido para: {caminho_destino}\n")
+
+print("🎉 Processamento em lote concluído com sucesso!")
