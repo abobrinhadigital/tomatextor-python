@@ -66,7 +66,7 @@ for input_audio in arquivos:
         for segment in segments:
             texto_limpo = segment.text.strip()
             print(texto_limpo) # Mostra no terminal para você acompanhar
-            f.write(texto_limpo + " ") # Salva no arquivo
+            f.write(texto_limpo + "\n") # Salva no arquivo
 
     print(f"\n✅ Texto salvo em: {output_text}")
 
