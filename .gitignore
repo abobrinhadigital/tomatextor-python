@@ -7,6 +7,8 @@ __pycache__/
 # Arquivos de áudio (ignora MP3 na raiz de audios e também em processados)
 audios/**/*.mp3
 
+#Dicionário de palavras para o Whisper
+dicionario.txt
 
 # Arquivos de transcrição (ignora os txts gerados)
 transcricoes/*.txt

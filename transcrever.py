@@ -27,6 +27,16 @@ if not arquivos:
 
 print(f"Encontrado(s) {len(arquivos)} arquivo(s) para processar.\n")
 
+# Carrega o dicionário/prompt inicial se o arquivo existir
+caminho_dicionario = "dicionario.txt"
+if os.path.exists(caminho_dicionario):
+    with open(caminho_dicionario, "r", encoding="utf-8") as f:
+        # Lê as linhas, remove espaços em branco e junta tudo com vírgulas
+        termos = [linha.strip() for linha in f.readlines() if linha.strip()]
+        prompt_inicial = ", ".join(termos)
+else:
+    prompt_inicial = None
+
 # Processa cada arquivo encontrado na pasta
 for input_audio in arquivos:
     nome_base_audio = os.path.basename(input_audio)
@@ -43,7 +53,13 @@ for input_audio in arquivos:
     output_text = os.path.join(pasta_transcricoes, nome_arquivo_txt)
 
     # Transcrição
-    segments, info = model.transcribe(input_audio, beam_size=5, language="pt")
+    #segments, info = model.transcribe(input_audio, beam_size=5, language="pt")
+    segments, info = model.transcribe(
+        input_audio, 
+        beam_size=5, 
+        language="pt",
+        initial_prompt=prompt_inicial
+    )
 
     # Abre o arquivo para salvar o texto
     with open(output_text, "w", encoding="utf-8") as f:
