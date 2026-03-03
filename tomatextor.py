@@ -8,7 +8,7 @@ from faster_whisper import WhisperModel
 __version__ = "2.2.0"
 
 # Carregando bibliotecas da Nvidia (Otimizado para RTX 3050)
-model_size = "medium"
+model_size = "turbo"
 model = WhisperModel(model_size, device="cuda", compute_type="float16")
 
 # Carrega configurações do arquivo .env (Manual para evitar dependências extras)
@@ -53,9 +53,11 @@ if os.path.exists(caminho_dicionario):
     with open(caminho_dicionario, "r", encoding="utf-8") as f:
         # Lê as linhas, remove espaços em branco e junta tudo com vírgulas
         termos = [linha.strip() for linha in f.readlines() if linha.strip()]
-        prompt_inicial = ", ".join(termos)
+        # Otimização do Pollux: Adiciona contexto para o Whisper entender que é papo de dev
+        contexto = "Transcrição de áudio sobre tecnologia, desenvolvimento de software e inteligência artificial. Termos importantes: "
+        prompt_inicial = contexto + ", ".join(termos) + "."
 else:
-    prompt_inicial = None
+    prompt_inicial = "Transcrição de áudio em português brasileiro sobre tecnologia e desenvolvimento."
 
 # Processa cada arquivo encontrado na pasta
 for input_audio in arquivos:
