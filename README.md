@@ -57,6 +57,6 @@ chmod +x tomatextor.sh
 ./tomatextor.sh
 ```
 
-<br/>
 ---
+
 *Este projeto é mantido sob as bênçãos do Gêmeo Imortal para a glória do Abobrinha Digital.*
