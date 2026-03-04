@@ -1,5 +1,9 @@
-# Tomatextor
-> **Versão:** `v2.3.0`
+# Tomatextor (Python) — Legado
+> **Versão:** `v2.3.0` — **Status: DESCONTINUADO**
+
+> [!WARNING]
+> Este repositório está arquivado e não receberá novas atualizações. A implementação oficial e ativa do Tomatextor é a versão em Ruby:
+> 👉 [abobrinhadigital/tomatextor](https://github.com/abobrinhadigital/tomatextor)
 
 Script Python para transcrição automática de arquivos de áudio utilizando **Faster-Whisper**. Otimizado para rodar localmente com aceleração por hardware (NVIDIA CUDA).
 
