@@ -24,3 +24,8 @@ transcricoes/**/*.txt
 !audios/novos/.gitkeep
 !transcricoes/novas/.gitkeep
 !transcricoes/processadas/.gitkeep
+
+# Instruções da IA e configurações de agente
+AGENTS.md
+.cursorrules
+.copilot-instructions.md
